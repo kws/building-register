@@ -1,0 +1,6 @@
+{% if icon %}<i class="material-icons prefix">{{ icon }}</i>{% endif %}
+<input id="id_{{ name }}" name="{{ name }}" type="text"
+   value="{% if value %}{{ value }}{% endif %}"
+   class="validate{% if errors %} invalid{% endif %}">
+<label for="id_{{ name }}">{{ label }}</label>
+{% if errors %}<span class="helper-text" data-error="{{ errors.as_text }}"/>{% endif %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Social Finance Registration Site{% endblock %}
+
+{% block content %}
+
+    <h2>Social Finance Registration</h2>
+
+    <p>
+    Log in
+    </p>
+
+    <div class="container">
+    {% for key, method in methods.items %}
+        <a class="waves-effect waves-light btn" href="{% url 'register_mode' method=key %}"
+        ><i class="material-icons right">{{ method.icon }}</i>{{ method.title }}</a>
+    {% endfor %}
+        <a class="waves-effect waves-light btn disabled" href="{% url 'register_mode' method='password' %}"
+        ><i class="material-icons right">padlock</i>SF Password</a>
+    </div>
+
+{% endblock %}
