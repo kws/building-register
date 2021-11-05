@@ -1,9 +1,47 @@
 {% extends "base.html" %}
+{% load material_forms %}
 
 {% block title %}Social Finance Registration Site{% endblock %}
 
 {% block content %}
 
-    <h2>Social Finance Homepage</h2>
+    <h2>Social Finance Sign-In Sheet</h2>
+
+
+        <form method="POST">
+            {% csrf_token %}
+
+
+    {% for record in todays_records %}
+        <li>{{ record.sign_in.timestamp }} - {{ record.sign_out.timestamp }}</li>
+
+    {% endfor %}
+
+    {% if signed_in_records %}
+
+        <p>You are currently signed-in</p>
+
+            <button type="submit" name="action" value="sign-out">Sign-Out</button>
+        </form>
+
+    {% else %}
+
+        <p>You are currently not signed in</p>
+          <div class="row">
+        <div class="input-field col s12">
+        {% text_field form.first_name label="First Name" %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+        {% text_field form.last_name label="Last Name" %}
+        </div>
+      </div>
+            <button type="submit" name="action" value="sign-in">Sign-In</button>
+
+    {% endif %}
+
+            </form>
 
 {% endblock %}

@@ -1,5 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
+
 from register.models import ContactDetails, ContactValidationCode
+
+User = get_user_model()
 
 
 class NoSpaceCharField(forms.CharField):
@@ -29,9 +33,18 @@ class RegisterForm(forms.Form):
         return details
 
 
+class ContactDetailsForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=100, required=True)
+    last_name = forms.CharField(max_length=100, required=True)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
 class SignInForm(forms.Form):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
+    first_name = forms.CharField(max_length=100, required=False)
+    last_name = forms.CharField(max_length=100, required=False)
     code = NoSpaceCharField(max_length=6, min_length=6)
 
 

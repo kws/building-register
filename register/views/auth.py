@@ -1,21 +1,17 @@
 import logging
 
+from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 
 from register.forms import RegisterForm, SignInForm
-from register.models import ContactMethod, ContactDetails
+from register.models import ContactMethod, ContactDetails, contact_methods
+from register.util.auth import login
+
+User = get_user_model()
 
 logger = logging.getLogger(__name__)
-
-contact_methods = {
-    ContactMethod.PHONE: dict(title="SMS", icon="smartphone", label="Mobile Number"),
-    ContactMethod.EMAIL: dict(title="Email", icon="email", label="Email Address"),
-}
-
-
-def index(request):
-    return render(request, 'register/index.html')
 
 
 def register(request):
@@ -36,12 +32,15 @@ def register_mode(request, method):
                 return redirect('register_submit')
             except:
                 logger.exception("Failed to send contact code")
-                form.add_error(None, "Invalid contact method")
+                form.add_error(None, "Invalid contact details")
     else:
         form = RegisterForm()
-    return render(request, 'register/register_mode.html', dict(form=form, method_id=method, method=contact_methods[method]))
+    return render(request, 'register/register_mode.html', dict(
+        form=form, method_id=method, method=contact_methods[method]
+    ))
 
 
+@transaction.atomic
 def register_submit(request):
     details_pk = request.session['concat_details']
     details = ContactDetails.objects.get(pk=details_pk)
@@ -51,8 +50,7 @@ def register_submit(request):
         if form.is_valid():
             code = form.cleaned_data['code']
             if details.validate_code(code):
-                # Sign-in or create the current user
-                print("Sign in successful!")
+                login(request, details, form.cleaned_data['first_name'], form.cleaned_data['last_name'])
                 return redirect('index')
             else:
                 form.add_error("code", "Code not found.")
@@ -60,5 +58,3 @@ def register_submit(request):
         form = SignInForm()
 
     return render(request, 'register/register_submit.html', dict(form=form, show_details=details.user is None))
-
-
