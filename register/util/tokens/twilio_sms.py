@@ -1,14 +1,20 @@
 from django.conf import settings
+from django import forms
 from twilio.base.exceptions import TwilioRestException
-from twilio.rest import Client
 
-from register.util.tokens.abstract_service import PingPongTokenService
+from register.util.tokens.abstract_service import PingPongTokenService, SendCodeForm
+
+
+class TwilioCodeForm(SendCodeForm):
+    contact_value = forms.CharField(max_length=15, label="Phone Number")
 
 
 class TwilioSMSService(PingPongTokenService):
     code = "sms"
     icon = "smartphone"
     label = "Text Message"
+
+    default_form = TwilioCodeForm
 
     @property
     def configured(self):
@@ -24,9 +30,8 @@ class TwilioSMSService(PingPongTokenService):
             return None
 
     def send_code(self, request, code):
-        message = settings.TWILIO_CLIENT.messages.create(
+        settings.TWILIO_CLIENT.messages.create(
             body=f"Your Social Finance sign-in code is {code.code}",
             from_='SF-REG',
             to=code.details.value
         )
-        print(message.sid)

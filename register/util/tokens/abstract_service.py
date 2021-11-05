@@ -11,27 +11,6 @@ from register.util.auth import login
 User = get_user_model()
 
 
-class SendCodeForm(forms.Form):
-    contact_value = NoSpaceCharField(max_length=200, label="Contact Details")
-    action = forms.CharField(widget=forms.HiddenInput(), required = False, initial="register")
-
-
-class ValidateCodeForm(forms.Form):
-    code = forms.IntegerField()
-    action = forms.CharField(widget=forms.HiddenInput(), required=False, initial="validate")
-    contact_id = forms.IntegerField(widget=forms.HiddenInput())
-
-
-class ValidateCodeWithContactForm(forms.ModelForm, ValidateCodeForm):
-    first_name = forms.CharField(max_length=100, required=True)
-    last_name = forms.CharField(max_length=100, required=True)
-    contact_form = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
-
-    class Meta:
-        fields = ['first_name', 'last_name']
-        model = User
-
-
 class TokenService(ABC):
     template = 'register/register_token.html'
 
@@ -69,9 +48,33 @@ class TokenService(ABC):
         return render(request, self.template, dict(form=form, method=self))
 
 
+class SendCodeForm(forms.Form):
+    contact_value = NoSpaceCharField(max_length=200, label="Contact Details")
+    action = forms.CharField(widget=forms.HiddenInput(), required = False, initial="register")
+
+
+class ValidateCodeForm(forms.Form):
+    code = forms.IntegerField()
+    action = forms.CharField(widget=forms.HiddenInput(), required=False, initial="validate")
+    contact_id = forms.IntegerField(widget=forms.HiddenInput())
+
+
+class ValidateCodeWithContactForm(forms.ModelForm, ValidateCodeForm):
+    first_name = forms.CharField(max_length=100, required=True)
+    last_name = forms.CharField(max_length=100, required=True)
+    contact_form = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
+
+    class Meta:
+        fields = ['first_name', 'last_name']
+        model = User
+
+
 class PingPongTokenService(TokenService):
 
     default_form = SendCodeForm
+    validate_code_form = ValidateCodeForm
+    validate_code_with_contact_form = ValidateCodeWithContactForm
+
 
     @abstractmethod
     def send_code(self, request, code):
@@ -88,7 +91,7 @@ class PingPongTokenService(TokenService):
 
     @transaction.atomic
     def handle_register(self, request):
-        form = SendCodeForm(request.POST)
+        form = self.default_form(request.POST)
         if form.is_valid():
             contact_value = self.validate_contact_value(form)
             if contact_value is not None:
@@ -97,17 +100,17 @@ class PingPongTokenService(TokenService):
                 self.send_code(request, code)
 
                 if created:
-                    form = ValidateCodeWithContactForm(initial=dict(contact_id=details.pk))
+                    form = self.validate_code_with_contact_form (initial=dict(contact_id=details.pk))
                 else:
-                    form = ValidateCodeForm(initial=dict(contact_id=details.pk))
+                    form = self.validate_code_form(initial=dict(contact_id=details.pk))
 
         return self.form_response(request, form)
 
     def handle_validate(self, request):
         if request.POST.get('contact_form'):
-            form = ValidateCodeWithContactForm(request.POST)
+            form = self.validate_code_with_contact_form(request.POST)
         else:
-            form = ValidateCodeForm(request.POST)
+            form = self.validate_code_form(request.POST)
 
         if form.is_valid():
             details_pk = form.cleaned_data['contact_id']
