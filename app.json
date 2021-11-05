@@ -1,0 +1,38 @@
+{
+  "name": "SF Sign-In",
+  "description": "Sign-in sheet. Not a sheet.",
+  "website": "https://www.socialfinance.org.uk/",
+  "repository": "https://github.com/SocialFinanceDigitalLabs/building-register",
+   "scripts": {
+    "postdeploy": "python manage.py migrate"
+  },
+  "env": {
+    "DJANGO_ENV": {
+      "description": "Deploy with production configuration",
+       "value": "production"
+    },
+    "DJANGO_SECRET_KEY": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "TWILIO_ACCOUNT_SID": {
+      "description": "For Twilio SMS, set the account SID",
+      "required": false
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "description": "For Twilio SMS, set the account token",
+      "required": false
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

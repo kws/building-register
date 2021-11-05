@@ -25,3 +25,4 @@ To be considered:
   * Community pressure? 
   * An accurate in-office slack channel?
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
