@@ -20,17 +20,7 @@ class NoSpaceCharField(forms.CharField):
 
 class RegisterForm(forms.Form):
     contact_value = NoSpaceCharField(max_length=200, min_length=5)
-
-    def send_code(self, method):
-        contact_value = self.cleaned_data['contact_value']
-        details, created = ContactDetails.objects.get_or_create(value=contact_value, method=method)
-
-        code = ContactValidationCode(details=details).generate_code()
-        code.save()
-
-        print(f"Sending code to {contact_value}: {code.code}")
-
-        return details
+    action = forms.CharField(widget = forms.HiddenInput(), required = False, initial="Test")
 
 
 class ContactDetailsForm(forms.ModelForm):
@@ -42,10 +32,7 @@ class ContactDetailsForm(forms.ModelForm):
         fields = ['first_name', 'last_name']
 
 
-class SignInForm(forms.Form):
-    first_name = forms.CharField(max_length=100, required=False)
-    last_name = forms.CharField(max_length=100, required=False)
-    code = NoSpaceCharField(max_length=6, min_length=6)
+
 
 
 

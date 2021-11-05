@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from django.contrib.auth import get_user_model, login as auth_login
 
