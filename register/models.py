@@ -43,6 +43,9 @@ class ContactDetails(models.Model):
     class Meta:
         unique_together = [['value', 'method']]
 
+    def __str__(self):
+        return f"[{self.id}]: {self.method}={self.value} ({self.user})"
+
 
 class AuditRecord(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
