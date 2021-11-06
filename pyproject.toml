@@ -13,6 +13,7 @@ python-dotenv = "^0.19.1"
 django-ipware = "^4.0.0"
 django-heroku = "^0.3.1"
 gunicorn = "^20.1.0"
+msgraphy = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
 

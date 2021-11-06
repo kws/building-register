@@ -12,7 +12,7 @@ User = get_user_model()
 
 
 class TokenService(ABC):
-    template = 'register/register_token.html'
+    template = 'register/login_form.html'
 
     @property
     @abstractmethod

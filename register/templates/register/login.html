@@ -12,7 +12,7 @@
 
     <div class="container">
     {% for method in methods.values %}
-        <a class="waves-effect waves-light btn" href="{% url 'register_mode' method=method.code %}"
+        <a class="waves-effect waves-light btn" href="{% url 'login_form' method=method.code %}"
         ><i class="material-icons right">{{ method.icon }}</i>{{ method.label }}</a>
     {% endfor %}
 
