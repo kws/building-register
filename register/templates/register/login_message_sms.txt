@@ -1,5 +1,1 @@
-Your personal Social Finance sign-in code is
-
-{{ code }}
-
-This code is only valid for 15 minutes. If you did not expect this code, please ignore it.
+Your ⚫⬛ one-time code is: {{ code }}. Don't share this code with anyone. ✌️ Kaj
