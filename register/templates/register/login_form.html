@@ -1,24 +1,32 @@
 {% extends "base.html" %}
 {% load material_forms %}
 
-{% block title %}Social Finance Registration Site{% endblock %}
+{% block title %}Vauxhall Walk Sign-In Sheet{% endblock %}
 
 {% block content %}
 
-    <h2>{{ method.title }} Registration</h2>
+    <h1>One-Time Token</h1>
+
+    {% if message %}
+        <p class="flow-text center-align">
+            {{ message }}
+        </p>
+    {% endif %}
 
     <form class="col s12" action="" method="POST">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+        {% csrf_token %}
 
-      {{ form }}
+        <p class="flow-text red">
+        {{ form.non_field_errors }}
+        </p>
 
-      <div class="row">
-        <div class="input-field col s6">
-            <button class="waves-effect waves-light btn" type="submit">Continue</button>
-            <a class="waves-effect waves-light btn grey" href="{% url 'login' %}">Back</a>
+        {{ form }}
+
+        <div class="row center-align" style="margin-top: 2em">
+            <button class="waves-effect waves-light btn" style="min-width: 12rem" type="submit">Continue</button>
+            <a class="waves-effect waves-light btn grey" style="min-width: 12rem" href="{% url 'login' %}">Back</a>
         </div>
-      </div>
+
     </form>
     <script>
       {% init_form %}

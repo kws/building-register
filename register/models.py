@@ -82,3 +82,4 @@ class SignInRecord(models.Model):
 
     class Meta:
         ordering = ["sign_in__timestamp"]
+        get_latest_by = ["sign_in__timestamp"]

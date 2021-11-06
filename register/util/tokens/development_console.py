@@ -10,6 +10,19 @@ class DevelopmentConsoleService(PingPongTokenService):
     icon = "engineering"
     label = "Development"
 
+    default_message = """
+    You are registering using a development token. To get this token you need console access on the development server.
+    To emulate a token validation failure, use the details 'fail'.
+    """
+
+    validate_code_message = """
+    Your code has now been printed on the console. Please enter your code to log in.
+    """
+
+    validate_code_with_contact_message = """
+    Your code has now been printed on the console. Please enter your name and code to set up your account.
+    """
+
     @property
     def configured(self):
         return settings.DEBUG

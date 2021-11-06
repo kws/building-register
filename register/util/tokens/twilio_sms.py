@@ -5,6 +5,8 @@ from twilio.base.exceptions import TwilioRestException
 
 from register.util.tokens.abstract_service import PingPongTokenService, SendCodeForm
 
+SENDER_NAME = "SF-REG"
+
 
 class TwilioCodeForm(SendCodeForm):
     contact_value = forms.CharField(max_length=15, label="Phone Number")
@@ -16,6 +18,20 @@ class TwilioSMSService(PingPongTokenService):
     label = "Text Message"
 
     default_form = TwilioCodeForm
+
+    default_message = """
+    You are registering using text message. Please enter a UK phone number to receive your one-time token.
+    """
+
+    validate_code_message = f"""
+    Your code has now been sent. Keep a look out for a message from '{SENDER_NAME}'.
+    Please enter your code to log in.
+    """
+
+    validate_code_with_contact_message = f"""
+    Your code has now been sent. Keep a look out for a message from '{SENDER_NAME}'. 
+    Please enter your name and code to set up your account.
+    """
 
     @property
     def configured(self):
@@ -35,6 +51,6 @@ class TwilioSMSService(PingPongTokenService):
 
         settings.TWILIO_CLIENT.messages.create(
             body=body_content,
-            from_='SF-REG',
+            from_=SENDER_NAME,
             to=code.details.value
         )

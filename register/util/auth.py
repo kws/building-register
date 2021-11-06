@@ -1,8 +1,5 @@
 import re
-import uuid
-
 from django.contrib.auth import get_user_model, login as auth_login
-
 from register.models import ContactDetails
 
 _username_pattern = re.compile(r'[^a-zA-Z09]')

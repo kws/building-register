@@ -1,0 +1,32 @@
+body>div.container {
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+}
+
+.btn {
+    margin: .75em;
+    font-size: 1.68rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: auto;
+}
+.btn>.material-icons {
+    font-size: 2rem;
+}
+
+.errorlist{
+    color: #f44336;
+}
+
+footer {
+    padding-top: 10em;
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+}
+footer>a {
+    color: inherit;
+}

@@ -22,6 +22,22 @@
     "TWILIO_AUTH_TOKEN": {
       "description": "For Twilio SMS, set the account token",
       "required": false
+    },
+    "O365_TENANT_ID": {
+      "description": "For Office 365 Graph API Email Sending, provide the O365 Tenant ID",
+      "required": false
+    },
+    "O365_CLIENT_ID": {
+      "description": "For Office 365 Graph API Email Sending, provide the Azure Application Client ID",
+      "required": false
+    },
+    "O365_CLIENT_SECRET": {
+      "description": "For Office 365 Graph API Email Sending, provide the Azure Application Client Secret",
+      "required": false
+    },
+    "O365_EMAIL_SENDER": {
+      "description": "For Office 365 Graph API Email Sending, provide a valid account email to send from",
+      "required": false
     }
   },
   "addons": [

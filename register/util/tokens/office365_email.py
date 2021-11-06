@@ -20,6 +20,25 @@ class Office365EmailService(PingPongTokenService):
 
     default_form = EmailCodeForm
 
+    try:
+        __sender_name = settings.O365_EMAIL_SENDER
+    except:
+        __sender_name = None
+
+    default_message = """
+    You are registering using email. Please enter your email address to receive your one-time token.
+    """
+
+    validate_code_message = f"""
+    Your code has now been sent. Keep a look out for a message from '{__sender_name}'.
+    Please enter your code to log in.
+    """
+
+    validate_code_with_contact_message = f"""
+    Your code has now been sent. Keep a look out for a message from '{__sender_name}'. 
+    Please enter your name and code to set up your account.
+    """
+
     @property
     def configured(self):
         return hasattr(settings, 'O365_EMAIL_SENDER')

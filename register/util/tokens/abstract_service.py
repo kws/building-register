@@ -38,14 +38,19 @@ class TokenService(ABC):
     def handle_post(self, request):
         return NotImplemented
 
+    def get_extra_context(self, request, form):
+        return {}
+
     def handle_request(self, request):
         if request.method == "POST":
             return self.handle_post(request)
         else:
-            return self.form_response(request, self.default_form())
+            form = self.default_form
+            return self.form_response(request, form)
 
-    def form_response(self, request, form):
-        return render(request, self.template, dict(form=form, method=self))
+    def form_response(self, request, form, **kwargs):
+        extra_context = {**kwargs, **self.get_extra_context(request, form)}
+        return render(request, self.template, dict(form=form, method=self, **extra_context))
 
 
 class SendCodeForm(forms.Form):
@@ -75,10 +80,25 @@ class PingPongTokenService(TokenService):
     validate_code_form = ValidateCodeForm
     validate_code_with_contact_form = ValidateCodeWithContactForm
 
+    default_message = "Please enter your contact details to receive a token."
+    validate_code_message = "Your code has now been printed on the console. Please enter your code to log in."
+    validate_code_with_contact_message = "Your code has now been sent. " \
+                                         "Please enter your name and code to set up your account."
 
     @abstractmethod
     def send_code(self, request, code):
         return NotImplemented
+
+    def get_extra_context(self, request, form):
+        context = dict(**super().get_extra_context(request, form))
+        if isinstance(form, self.validate_code_with_contact_form):
+            context['message'] = self.validate_code_with_contact_message
+        elif isinstance(form, self.validate_code_form):
+            context['message'] = self.validate_code_message
+        else:
+            context['message'] = self.default_message
+
+        return context
 
     def handle_post(self, request):
         action = request.POST.get("action")
@@ -98,11 +118,10 @@ class PingPongTokenService(TokenService):
                 details, created = ContactDetails.objects.get_or_create(value=contact_value, method=self.code)
                 code = ContactValidationCode.objects.create_code(details)
                 self.send_code(request, code)
-
-                if created:
-                    form = self.validate_code_with_contact_form (initial=dict(contact_id=details.pk))
-                else:
+                if details.user:
                     form = self.validate_code_form(initial=dict(contact_id=details.pk))
+                else:
+                    form = self.validate_code_with_contact_form(initial=dict(contact_id=details.pk))
 
         return self.form_response(request, form)
 

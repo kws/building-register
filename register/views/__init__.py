@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render
+from django.views.decorators.cache import never_cache
 from ipware import get_client_ip
 
 from register.forms import ContactDetailsForm
@@ -30,6 +31,7 @@ def _handle_sign_in_out(request):
 
 
 @login_required
+@never_cache
 def index(request):
     form = None
     if request.method == 'POST':

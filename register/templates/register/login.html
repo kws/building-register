@@ -1,19 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Social Finance Registration Site{% endblock %}
+{% block title %}Vauxhall Walk Sign-In Sheet{% endblock %}
 
 {% block content %}
 
-    <h2>Social Finance Registration</h2>
+    <h1>Vauxhall Walk Sign-In Sheet</h1>
 
-    <p>
-    Log in
+    <p class="flow-text center-align">
+        You can use this application as an alternative to the pen-and-paper sign-in sheets in the reception.
     </p>
 
-    <div class="container">
-    {% for method in methods.values %}
-        <a class="waves-effect waves-light btn" href="{% url 'login_form' method=method.code %}"
-        ><i class="material-icons right">{{ method.icon }}</i>{{ method.label }}</a>
-    {% endfor %}
+    <p class="flow-text center-align">
+        So we can ensure that only you can sign yourself in and out of the building, we need one means of verifying your
+        identity. You can either use your email or mobile phone number to receive a one-time code.
+    </p>
+
+    <div class="row center-align">
+        {% for method in methods.values %}
+            <a class="waves-effect waves-light btn z-depth-3" style="min-width: 20rem;"
+               href="{% url 'login_form' method=method.code %}"
+            ><i class="material-icons right">{{ method.icon }}</i>{{ method.label }}</a>
+        {% endfor %}
+    </div>
+
+    <p class="flow-text center-align">
+        You will not need to do this again on this device unless you clear your cookies. If you sign in from another
+        device, please use the same sign-in method, otherwise you may not be able to see your details.
+    </p>
+
+    <p class="flow-text center-align">
+        We will only use your details for the purpose of providing this service and to notify you of any issues or
+        emergencies whilst you are in the building. We may also send you reminders to sign-out when you leave the
+        building.
+    </p>
 
 {% endblock %}
