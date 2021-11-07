@@ -1,1 +1,1 @@
-Your ⚫⬛ one-time code is: {{ code }}. Don't share this code with anyone. ✌️ Kaj
+Your one-time code is: {{ code }}. Don't share this code with anyone. ✌️ ⚫⬛
