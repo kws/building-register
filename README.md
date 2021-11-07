@@ -21,7 +21,7 @@ If you have a suggested improvement, please submit them in our [issues log][issu
 ## What do I need?
 
 Patience. And a few tools. Most importantly you need [Python][python]. Follow the links
-to download a recent version of Node and install this.
+to download a recent version and install this.
 
 Next, we use [Poetry][poetry] for dependency management. Once you have 
 working python version installed, installing Poetry should be as easy as following
