@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from ipware import get_client_ip
+
 User = get_user_model()
 
 
@@ -39,12 +41,21 @@ class ContactDetails(models.Model):
     value = models.CharField(max_length=200)
     method = models.CharField(max_length=5)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    audit = models.ForeignKey("AuditRecord", on_delete=models.CASCADE, null=True, related_name="contact_details")
 
     class Meta:
         unique_together = [['value', 'method']]
+        verbose_name_plural = "Contact details"
 
     def __str__(self):
         return f"[{self.id}]: {self.method}={self.value} ({self.user})"
+
+
+class AuditRecordManager(models.Manager):
+
+    def create_from_request(self, request) -> "AuditRecord":
+        ip, is_routable = get_client_ip(request)
+        return super().create(ip=ip, user_agent=request.META.get('HTTP_USER_AGENT'))
 
 
 class AuditRecord(models.Model):
@@ -52,13 +63,15 @@ class AuditRecord(models.Model):
     ip = models.GenericIPAddressField(null=True)
     user_agent = models.CharField(max_length=255, null=True)
 
+    objects = AuditRecordManager()
+
     def __str__(self):
         if self.ip:
             return f"{self.timestamp:%-d %b %Y %H:%M} ({self.ip})"
         return f"{self.timestamp}"
 
 
-class SignInManager(models.QuerySet):
+class SignInQueryset(models.QuerySet):
     def today(self):
         return self.filter(date=now())
 
@@ -81,7 +94,7 @@ class SignInRecord(models.Model):
     sign_in = models.ForeignKey(AuditRecord, on_delete=models.CASCADE, related_name="sign_in")
     sign_out = models.ForeignKey(AuditRecord, on_delete=models.CASCADE, null=True, related_name="sign_out")
 
-    objects = SignInManager().as_manager()
+    objects = SignInQueryset().as_manager()
 
     class Meta:
         ordering = ["sign_in__timestamp"]

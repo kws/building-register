@@ -1,6 +1,8 @@
 import re
 from django.contrib.auth import get_user_model, login as auth_login
-from register.models import ContactDetails
+from django.db import transaction
+
+from register.models import ContactDetails, AuditRecord
 
 _username_pattern = re.compile(r'[^a-zA-Z09]')
 
@@ -22,6 +24,7 @@ def get_unique_username(first_name: str, last_name: str) -> str:
     return unique_username[1]
 
 
+@transaction.atomic
 def login(request, details: ContactDetails, first_name: str, last_name: str) -> User:
     # Sign-in or create the current user
     if details.user is None:
@@ -31,6 +34,9 @@ def login(request, details: ContactDetails, first_name: str, last_name: str) -> 
             first_name=first_name,
             last_name=last_name,
         )
-        details.save()
+    audit = AuditRecord.objects.create_from_request(request)
+    details.audit = audit
+    details.save()
+
     auth_login(request, details.user)
     return details.user
