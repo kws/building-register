@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
     <head>
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}Vauxhall Walk Sign-In Sheet{% endblock %}</title>
 
         <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/icon-57x57.png'%}">
         <link rel="apple-touch-icon" sizes="60x60" href="{% static 'img/icon-60x60.png'%}">
@@ -25,27 +25,20 @@
         <link type="text/css" rel="stylesheet" href="{% static 'css/main.css' %}" />
         <link type="text/css" rel="stylesheet" href="{% static 'css/forkongithub.css' %}" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        {% block extra_head %}{% endblock %}
     </head>
 
     <body>
-        <div class="red white-text">
-            <p class="flow-text center-align">
-            This site is still in development and signing in and out is not yet monitored.
-            </p>
-            <p class="flow-text center-align">
-                Please continue to use pen and paper until further notice.
-            </p>
-        </div>
+      {% block page_header %}{% endblock %}
       <div class="container">
-      {% block content %}{% endblock %}
+          {% block content %}{% endblock %}
       </div>
-
       <footer>
           Made with &#10084;&#65039;&nbsp; by <a href="https://github.com/kws" target="_blank">Kaj</a>
       </footer>
       <span class="forkongithub">
           <a href="https://github.com/SocialFinanceDigitalLabs/building-register">Fork me on GitHub</a>
       </span>
-      <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
     </body>
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
 </html>

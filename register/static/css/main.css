@@ -31,3 +31,28 @@ footer>a {
     color: inherit;
 }
 
+.breadcrumbs>a {
+    font-size: 1.2em;
+    color: inherit;
+    opacity: 0.5;
+}
+.breadcrumbs>a::before {
+  content: '\E5CC';
+  font-family: 'Material Icons';
+  font-size: 1.2em;
+  vertical-align: -12%;
+  opacity: 0.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.breadcrumbs>a:first-child::before {
+    content: "";
+    padding: 0;
+}
+.breadcrumbs>a:last-child {
+    opacity: 1;
+}
+
+.dropdown-content li>a {
+    color: black;
+}

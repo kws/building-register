@@ -1,30 +1,38 @@
 {% extends "base.html" %}
 {% load material_forms %}
 
-{% block title %}Vauxhall Walk Sign-In Sheet{% endblock %}
+{% block page_header %}
+    <div class="red white-text flow-text center-align">
+        This site is still in development and signing in and out is not yet monitored.<br /><br />
+        Please continue to use pen and paper until further notice.
+    </div>
+    {% include "register/menu.html" %}
+{% endblock %}
 
 {% block content %}
 
     <h1>Vauxhall Walk Sign-In Sheet</h1>
 
-    <p class="flow-text center-align">
-        Hi {{ form.first_name.value }}! You are currently
+    <p class="flow-text center-align" style="font-size: 1.2rem;">
+        Hi {{ user.first_name }},
     </p>
 
     {% if signed_in_records %}
         <p class="flow-text center-align green-text darken-2">
-            signed-in to the office since
+            You are signed-in since
             {{ signed_in_records.earliest.sign_in.timestamp |date:'P' }}
         </p>
     {% else %}
-        <p class="flow-text center-align red-text darken-2">not registered as being in the office.</p>
+        <p class="flow-text center-align red-text darken-2">
+        Please sign-in below when entering the office.
+        </p>
     {% endif %}
 
     <form method="POST">
         {% csrf_token %}
 
         {% if signed_in_records %}
-            <p class="flow-text center-align">
+            <p class="flow-text center-align" style="font-size: 1.2rem;">
                 Please remember to sign out every time you leave the building.
             </p>
             <div class="row center-align" style="margin-top: 2em">
@@ -34,35 +42,23 @@
                 </button>
             </div>
         {% else %}
-            <p class="flow-text center-align">
+            <p class="flow-text center-align" style="font-size: 1.2rem;">
                 By clicking sign-in below I confirm that I am currently in the office and that I am aware of,
                 and will follow, the current COVID risk assessment, including any pre-conditions for entering
                 the office, such as testing and temperature checks.
             </p>
-            <p class="flow-text center-align">
-                Please confirm your details and click the sign-in button.
-            </p>
-            <div class="row" style="max-width: 40em; margin-top: 3em;">
-                <div class="input-field col s12 m6">
-                    {% text_field form.first_name label="First Name" %}
-                </div>
-                <div class="input-field col s12 m6">
-                    {% text_field form.last_name label="Last Name" %}
-                </div>
-            </div>
             <div class="row center-align" style="margin-top: 2em">
                 <button class="waves-effect waves-light btn z-depth-3" type="submit" name="action" value="sign-in">
                     <i class="material-icons right">edit_note</i>
-                    Sign-In
+                    Sign In
                 </button>
             </div>
         {% endif %}
 
     </form>
 
-    <p class="flow-text center-align">
-        If you are not {{ form.first_name.value }}, please <a href="{% url "logout" %}">log in again.</a>
+    <p class="flow-text center-align" style="font-size: 1.2rem;">
+        If you are not {{ user.first_name }} {{ user.last_name }}, please <a href="{% url "logout" %}">log in again</a>.
     </p>
-
 
 {% endblock %}

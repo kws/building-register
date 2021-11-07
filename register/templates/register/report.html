@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block extra_head %}
+  <meta http-equiv="refresh" content="60">
+{% endblock %}
+
+{% block page_header %}
+    {% include "register/menu.html" with crumb="Report" %}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Vauxhall Walk Sign-In Report - {% now "SHORT_DATE_FORMAT" %}</h1>
+
+    <p class="flow-text center-align">
+        There are currently {{ signed_in_records.count }}
+        {% if signed_in_records.count == 1%}person{% else %}people{% endif %} signed-in.
+    </p>
+
+    <table>
+        <thead>
+            <th>Name</th><th>Sign-In</th><th>Sign-Out</th>
+        </thead>
+        <tbody>
+        {% for record in signed_in_records %}
+            <tr>
+                <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+                <td>{{ record.sign_in.timestamp }}</td>
+                <td>{{ record.sign_out.timestamp }}</td>
+            </tr>
+        {% endfor %}
+        {% for record in signed_out_records %}
+            <tr class="grey-text">
+                <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+                <td>{{ record.sign_in.timestamp }}</td>
+                <td>{{ record.sign_out.timestamp }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p>{% now "DATETIME_FORMAT" %}</p>
+{% endblock %}

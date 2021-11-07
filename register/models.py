@@ -86,3 +86,4 @@ class SignInRecord(models.Model):
     class Meta:
         ordering = ["sign_in__timestamp"]
         get_latest_by = ["sign_in__timestamp"]
+        permissions = [("view_report", "Can view reports of all records")]

@@ -24,8 +24,8 @@ def text_field(field, icon=None, **kwargs):
 def init_form():
     return mark_safe("""
 <script>
- $(document).ready(function() {
+  document.addEventListener('DOMContentLoaded', function() {
     M.updateTextFields();
- });
+  });
 </script>
     """)

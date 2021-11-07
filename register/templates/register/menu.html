@@ -1,0 +1,28 @@
+<div style="display: flex; width: 100%; align-items: center; padding: 5px">
+    {% if crumb %}
+        <div class="breadcrumbs">
+            <a href="{% url "index" %}">Home</a>
+            <a>{{ crumb }}</a>
+        </div>
+    {% endif %}
+    <div style="flex: auto"></div>
+    <ul id="dropdown1" class="dropdown-content">
+      <li><a href="{% url "profile" %}">Profile</a></li>
+      {% if perms.register.view_report %}
+      <li><a href="{% url "report" %}">Report</a></li>
+      {% endif %}
+      <li class="divider"></li>
+      <li><a href="{% url "logout" %}">Logout</a></li>
+    </ul>
+    <div>
+        <a class="dropdown-trigger btn-floating waves-effect waves-light grey" data-target="dropdown1" href="#">
+            <i class="material-icons right">menu</i>
+        </a>
+    </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(elems);
+  });
+</script>
