@@ -14,6 +14,7 @@ django-ipware = "^4.0.0"
 django-heroku = "^0.3.1"
 gunicorn = "^20.1.0"
 msgraphy = "^0.2.1"
+slack-sdk = "^3.11.2"
 
 [tool.poetry.dev-dependencies]
 
