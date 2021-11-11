@@ -61,4 +61,18 @@
         If you are not {{ user.first_name }} {{ user.last_name }}, please <a href="{% url "logout" %}">log in again</a>.
     </p>
 
+    <script>
+    var dateOnPageLoad = Date.now()
+    var refreshTime = 1000*60 // One minute
+    function checkDate() {
+      var timeSincePageLoad = Date.now() - dateOnPageLoad;
+      if (timeSincePageLoad >= refreshTime) {
+        window.location = window.location.href;
+      }
+    }
+    document.addEventListener("visibilitychange", checkDate);
+    window.addEventListener("focus", checkDate);
+
+    </script>
+
 {% endblock %}
