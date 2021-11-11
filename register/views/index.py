@@ -24,14 +24,17 @@ def _handle_sign_in_out(request):
     if date != today:
         return dict(error=f"Sorry, you attempted to {action} for the wrong date.")
 
+    response = {}
     if action == "sign-in" and signed_in.count() == 0:
         SignInRecord.objects.create(user=request.user, sign_in=audit)
         user_signed_in.send_robust(sender=SignInRecord, request=request, user=request.user, audit=audit)
+        response['flash'] = "You have successfully signed in. Don't forget to sign out when you leave."
     elif action == "sign-out":
         signed_in.sign_out(audit)
         user_signed_out.send_robust(sender=SignInRecord, request=request, user=request.user, audit=audit)
+        response['flash'] = "You have successfully signed out. See you again soon!"
 
-    return {}
+    return response
 
 
 @login_required

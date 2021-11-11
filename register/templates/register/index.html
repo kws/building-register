@@ -3,8 +3,13 @@
 
 {% block page_header %}
     {% if error %}
-        <div class="red white-text flow-text center-align">
+        <div id="error" class="red white-text flow-text center-align">
           {{ error }}
+        </div>
+    {% endif %}
+    {% if flash %}
+        <div id="flash" class="amber black-text flow-text center-align">
+          {{ flash }}
         </div>
     {% endif %}
     {% include "register/menu.html" %}
@@ -72,7 +77,26 @@
     }
     document.addEventListener("visibilitychange", checkDate);
     window.addEventListener("focus", checkDate);
-
     </script>
+
+    {% if error %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var value = document.getElementById('error').textContent;
+            M.toast({html: value, classes: "red wite-text prewrap"});
+            document.getElementById("error").remove();
+          });
+        </script>
+    {% endif %}
+
+    {% if flash %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var value = document.getElementById('flash').textContent;
+            M.toast({html: value, classes: "amber black-text prewrap"});
+            document.getElementById("flash").remove();
+          });
+        </script>
+    {% endif %}
 
 {% endblock %}
