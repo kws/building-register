@@ -2,19 +2,18 @@
 {% load material_forms %}
 
 {% block page_header %}
-    <div class="red white-text flow-text center-align">
-        This site is still in development and signing in and out is not yet monitored.<br /><br />
-        Please continue to use pen and paper until further notice.
-    </div>
+    {% if error %}
+        <div class="red white-text flow-text center-align">
+          {{ error }}
+        </div>
+    {% endif %}
     {% include "register/menu.html" %}
 {% endblock %}
 
 {% block content %}
 
-    <h1>Vauxhall Walk Sign-In Sheet</h1>
-
     <p class="flow-text center-align" style="font-size: 1.2rem;">
-        Hi {{ user.first_name }},
+        Hi {{ user.first_name }}
     </p>
 
     {% if signed_in_records %}
@@ -30,6 +29,7 @@
 
     <form method="POST">
         {% csrf_token %}
+        <input type="hidden" name="date" value="{{ today }}"/>
 
         {% if signed_in_records %}
             <p class="flow-text center-align" style="font-size: 1.2rem;">
