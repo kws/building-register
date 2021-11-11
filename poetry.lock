@@ -164,12 +164,24 @@ arrow = ">=1.1.0,<2.0.0"
 blessed = ">=1.17.6,<2.0.0"
 django = ">=2.2"
 django-picklefield = ">=3.0.1,<4.0.0"
+django-q-sentry = {version = ">=0.1", optional = true, markers = "extra == \"sentry\""}
 redis = ">=3.5.3,<4.0.0"
 
 [package.extras]
 testing = ["hiredis (>=1.0.1,<2.0.0)", "psutil (>=5.7.0,<6.0.0)", "django-redis (>=4.12.1,<5.0.0)", "iron-mq (>=0.9,<0.10)", "boto3 (>=1.14.12,<2.0.0)", "pymongo (>=3.10.1,<4.0.0)", "croniter (>=0.3.34,<0.4.0)"]
 rollbar = ["django-q-rollbar (>=0.1)"]
 sentry = ["django-q-sentry (>=0.1)"]
+
+[[package]]
+name = "django-q-sentry"
+version = "0.1.5"
+description = "A Sentry support plugin for Django Q"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+sentry-sdk = ">=0.16.5"
 
 [[package]]
 name = "django-split-settings"
@@ -443,7 +455,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.7"
-content-hash = "d83eb0431e9a59fe386cb3234d19310640df44c2a74c8fcfbe917b6b6fa7eac4"
+content-hash = "fd2e7a52e458eadaa746c6d26b37dd27456f106eec4c92470bdbb0a10119c96b"
 
 [metadata.files]
 ansicon = [
@@ -567,6 +579,10 @@ django-picklefield = [
 django-q = [
     {file = "django-q-1.3.9.tar.gz", hash = "sha256:5c6b4d530aa3aabf9c6aa57376da1ca2abf89a1562b77038b7a04e52a4a0a91b"},
     {file = "django_q-1.3.9-py3-none-any.whl", hash = "sha256:1b74ce3a8931990b136903e3a7bc9b07243282a2b5355117246f05ed5d076e68"},
+]
+django-q-sentry = [
+    {file = "django-q-sentry-0.1.5.tar.gz", hash = "sha256:6417b03ff19bce50de256e9b6e947c37b870bf00ad9acea775c0ce6e006e58ef"},
+    {file = "django_q_sentry-0.1.5-py3-none-any.whl", hash = "sha256:11d7870c40194be4e610d9a19bd310477421349be30410f7f26dfbf4e3b93d3b"},
 ]
 django-split-settings = [
     {file = "django-split-settings-1.1.0.tar.gz", hash = "sha256:6b3aed89667a95525152026eab93a9f038ff22df6883006318b8b4a3d0ca6888"},

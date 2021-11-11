@@ -47,10 +47,12 @@ class TwilioSMSService(PingPongTokenService):
             return None
 
     def send_code(self, request, code):
-        body_content = render_to_string('register/login_message_sms.txt', dict(code=code.code))
+        self.send_message(code.details.value, "login", code=code.code)
 
+    def send_message(self, recipient, template, **context):
+        body_content = render_to_string(f'register/messaging/sms/{template}.txt', context)
         settings.TWILIO_CLIENT.messages.create(
             body=body_content,
             from_=SENDER_NAME,
-            to=code.details.value
+            to=recipient
         )
