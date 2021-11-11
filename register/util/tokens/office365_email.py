@@ -44,12 +44,16 @@ class Office365EmailService(PingPongTokenService):
         return hasattr(settings, 'O365_EMAIL_SENDER')
 
     def send_code(self, request, code):
-        body_content = render_to_string('register/login_message_email.html', dict(code=code.code))
+        self.send_message(code.details.value, "login", code=code.code, subject="SF Building Sign-In Code")
 
+    def send_message(self, recipient, template, subject=None, **context):
+        if subject is None:
+            subject = "SF Office Message"
+        body_content = render_to_string(f'register/messaging/email/{template}.html', context)
         message = dict(
-            subject="SF Building Sign-In Code",
+            subject=subject,
             body=dict(contentType="HTML", content=body_content),
-            toRecipients=[dict(emailAddress=dict(address=code.details.value))],
+            toRecipients=[dict(emailAddress=dict(address=recipient))],
         )
         response = settings.MSGRAPHY_CLIENT.make_request(
             f"/users/{settings.O365_EMAIL_SENDER}/sendMail",
@@ -57,5 +61,5 @@ class Office365EmailService(PingPongTokenService):
             json=dict(message=message, saveToSentItems=False)
         )
         if not response.ok:
-            logger.exception(f"Failed to send token message to {code.details.value}")
+            logger.exception(f"Failed to send token message to {recipient}")
             raise Exception("Failed to send message")
