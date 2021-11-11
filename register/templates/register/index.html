@@ -2,42 +2,48 @@
 {% load material_forms %}
 
 {% block page_header %}
-    <div class="red white-text flow-text center-align">
-        This site is still in development and signing in and out is not yet monitored.<br /><br />
-        Please continue to use pen and paper until further notice.
-    </div>
+    <div class="red-text flow-text center-align" style="font-size: 1rem;">Please use this site AND pen and paper whilst we are testing</div>
+    {% if error %}
+        <div id="error" class="red white-text flow-text center-align">
+          {{ error }}
+        </div>
+    {% endif %}
+    {% if flash %}
+        <div id="flash" class="amber black-text flow-text center-align">
+          {{ flash }}
+        </div>
+    {% endif %}
     {% include "register/menu.html" %}
 {% endblock %}
 
 {% block content %}
 
-    <h1>Vauxhall Walk Sign-In Sheet</h1>
-
     <p class="flow-text center-align" style="font-size: 1.2rem;">
-        Hi {{ user.first_name }},
+        Hi {{ user.first_name }}
     </p>
 
     {% if signed_in_records %}
-        <p class="flow-text center-align green-text darken-2">
+        <p class="flow-text center-align red-text text-darken-2">
             You are signed-in since
             {{ signed_in_records.earliest.sign_in.timestamp |date:'P' }}
         </p>
     {% else %}
-        <p class="flow-text center-align red-text darken-2">
+        <p class="flow-text center-align green-text text-darken-2">
         Please sign-in below when entering the office.
         </p>
     {% endif %}
 
     <form method="POST">
         {% csrf_token %}
+        <input id="date" type="hidden" name="date" value="{{ today }}"/>
 
         {% if signed_in_records %}
             <p class="flow-text center-align" style="font-size: 1.2rem;">
                 Please remember to sign out every time you leave the building.
             </p>
             <div class="row center-align" style="margin-top: 2em">
-                <button class="waves-effect waves-light btn z-depth-3" type="submit" name="action" value="sign-out">
-                    <i class="material-icons right">edit_note</i>
+                <button class="waves-effect waves-light btn z-depth-3 red darken-2" type="submit" name="action" value="sign-out">
+                    <i class="material-icons right">self_improvement</i>
                     Sign Out
                 </button>
             </div>
@@ -48,8 +54,8 @@
                 the office, such as testing and temperature checks.
             </p>
             <div class="row center-align" style="margin-top: 2em">
-                <button class="waves-effect waves-light btn z-depth-3" type="submit" name="action" value="sign-in">
-                    <i class="material-icons right">edit_note</i>
+                <button class="waves-effect waves-light btn z-depth-3 green" type="submit" name="action" value="sign-in">
+                    <i class="material-icons right">vpn_key</i>
                     Sign In
                 </button>
             </div>
@@ -60,5 +66,38 @@
     <p class="flow-text center-align" style="font-size: 1.2rem;">
         If you are not {{ user.first_name }} {{ user.last_name }}, please <a href="{% url "logout" %}">log in again</a>.
     </p>
+
+    <script>
+    var dateOnPageLoad = Date.now()
+    var refreshTime = 1000*60 // One minute
+    function checkDate() {
+      var timeSincePageLoad = Date.now() - dateOnPageLoad;
+      if (timeSincePageLoad >= refreshTime) {
+        window.location = window.location.href;
+      }
+    }
+    document.addEventListener("visibilitychange", checkDate);
+    window.addEventListener("focus", checkDate);
+    </script>
+
+    {% if error %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var value = document.getElementById('error').textContent;
+            M.toast({html: value, classes: "red wite-text prewrap"});
+            document.getElementById("error").remove();
+          });
+        </script>
+    {% endif %}
+
+    {% if flash %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var value = document.getElementById('flash').textContent;
+            M.toast({html: value, classes: "amber black-text prewrap"});
+            document.getElementById("flash").remove();
+          });
+        </script>
+    {% endif %}
 
 {% endblock %}
