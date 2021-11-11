@@ -43,6 +43,10 @@
   "addons": [
     "heroku-postgresql"
   ],
+  "environments": {
+    "review": {
+    }
+  },
   "buildpacks": [
     {
       "url": "https://github.com/moneymeets/python-poetry-buildpack.git"
