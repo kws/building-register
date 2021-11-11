@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.template.loader import render_to_string
+
 from register.util.tokens.abstract_service import SendCodeForm, PingPongTokenService
 
 User = get_user_model()
@@ -35,4 +37,9 @@ class DevelopmentConsoleService(PingPongTokenService):
         return contact_value
 
     def send_code(self, request, code):
-        print(f"Sending code {code.code} to {code.details.value}")
+        self.send_message(code.details.value, "login", code=code.code)
+
+    def send_message(self, recipient, template, **context):
+        body_content = render_to_string(f'register/messaging/dev/{template}.txt', context)
+        print(f"{recipient}: {body_content}")
+

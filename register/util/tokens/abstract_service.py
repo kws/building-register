@@ -89,6 +89,10 @@ class PingPongTokenService(TokenService):
     def send_code(self, request, code):
         return NotImplemented
 
+    @abstractmethod
+    def send_message(self, recipient, template, **context):
+        return NotImplemented
+
     def get_extra_context(self, request, form):
         context = dict(**super().get_extra_context(request, form))
         if isinstance(form, self.validate_code_with_contact_form):
