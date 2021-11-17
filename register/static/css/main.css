@@ -56,3 +56,12 @@ footer>a {
 .dropdown-content li>a {
     color: black;
 }
+
+@media only screen and (max-width: 600px) {
+  .signed-in {
+    border: 25px solid green;
+  }
+  .signed-out {
+    border: 25px solid red;
+  }
+}
