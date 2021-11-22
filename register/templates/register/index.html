@@ -4,7 +4,6 @@
 {% block body_class %}signed-{% if signed_in_records %}in{% else %}out{% endif %}{% endblock %}
 
 {% block page_header %}
-    <div class="red-text flow-text center-align" style="font-size: 1rem;">Please use this site AND pen and paper whilst we are testing</div>
     {% if error %}
         <div id="error" class="red white-text flow-text center-align">
           {{ error }}
